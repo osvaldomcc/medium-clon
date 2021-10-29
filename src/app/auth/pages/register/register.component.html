@@ -1,2 +1,44 @@
-<p>register works!</p>
-<a [routerLink]="['/auth/login']">Login</a>
+<h1 class="text-3xl text-gray-700 font-serif">Join Medium.</h1>
+<form class="my-5 text-gray-900" [formGroup]="registerForm" (ngSubmit)="registerUser()">
+  <app-forminput
+    (input)="validateUsername()"
+    labelTitle="Username"
+    typeInput="username"
+    formControlName="username"
+    [errorMsg]="usernameError"
+  ></app-forminput>
+  <div class="mt-2"></div>
+  <app-forminput
+    (input)="validateEmail()"
+    labelTitle="Email"
+    typeInput="email"
+    formControlName="email"
+    [errorMsg]="emailError"
+  ></app-forminput>
+  <div class="mt-2"></div>
+  <app-forminput
+    (input)="validatePassword()"
+    labelTitle="Password"
+    typeInput="password"
+    formControlName="password"
+    [errorMsg]="passwordError"
+  ></app-forminput>
+  <div class="mt-2"></div>
+  <app-forminput
+    (input)="validatePassword2()"
+    labelTitle="Confirm Password"
+    typeInput="password"
+    formControlName="password2"
+    [errorMsg]="password2Error"
+  ></app-forminput>
+  <div class="mt-8 text-right max-w-sm m-auto">
+    <app-button [shouldEnable]="registerForm.invalid">Create</app-button>
+  </div>
+  <hr class="mt-5" />
+</form>
+<h2>
+  Already have an account?
+  <a [routerLink]="['/auth/login']" class="font-bold text-green-600">
+    Sign In
+  </a>
+</h2>

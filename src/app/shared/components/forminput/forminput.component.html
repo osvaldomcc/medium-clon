@@ -1,0 +1,23 @@
+<div class="flex flex-col max-w-sm m-auto">
+  <label [for]="idInput" class="text-left font-semibold">{{
+    labelTitle
+  }}</label>
+  <input
+    [id]="idInput"
+    [(ngModel)]="input"
+    (ngModelChange)="onChange($event)"
+    (blur)="onTouch()"
+    class="
+      p-2
+      border border-gray-500
+      rounded
+      mt-2
+      focus:outline-none focus:ring-1
+      ring-gray-600
+    "
+    [type]="typeInput"
+    placeholder="Your {{ idInput }}..."
+    autocomplete="off"
+  />
+  <app-error-message *ngIf="errorMsg">{{ errorMsg }}</app-error-message>
+</div>

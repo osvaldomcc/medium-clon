@@ -1,4 +1,15 @@
-<p>auth works!</p>
-<div>
-  <router-outlet></router-outlet>
+<div class="w-screen h-screen flex items-center justify-center">
+  <div class="max-w-2xl m-auto text-center shadow- shadow-lg rounded-md border">
+    <div class="ml-20 mr-20 mt-20 mb-20">
+      <div class="mb-10">
+        <router-outlet></router-outlet>
+      </div>
+      <p class="max-w-lg text-center text-sm font-semibold text-gray-500">
+        Click “Sign In” to agree to Medium’s
+        <a href="#" class="underline">Terms of Service</a> and acknowledge that
+        Medium’s <a href="#" class="underline">Privacy Policy</a> applies to
+        you.
+      </p>
+    </div>
+  </div>
 </div>

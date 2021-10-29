@@ -1,2 +1,34 @@
-<p>login works!</p>
-<a [routerLink]="['/auth/register']"> Register </a>
+<h1 class="text-3xl text-gray-700 font-serif">Welcome back.</h1>
+<form class="my-5 text-gray-900" [formGroup]="loginForm" (ngSubmit)="login()">
+  <app-forminput
+    (input)="validateEmail()"
+    labelTitle="Email"
+    typeInput="email"
+    formControlName="email"
+    [errorMsg]="emailError"
+  ></app-forminput>
+  <div class="mt-2"></div>
+  <app-forminput
+    (input)="validatePassword()"
+    labelTitle="Password"
+    typeInput="password"
+    formControlName="password"
+    [errorMsg]="passwordError"
+  ></app-forminput>
+  <div class="mt-8 text-right max-w-sm m-auto">
+    <app-button typeButton="submit" [shouldEnable]="loginForm.invalid"
+      >Log In</app-button
+    >
+  </div>
+  <hr class="mt-10" />
+</form>
+<h2 class="mb-10">
+  No account?
+  <a [routerLink]="['/auth/register']" class="font-bold text-green-600">
+    Create one
+  </a>
+</h2>
+
+<app-alert *ngIf="generalError">
+  {{ generalError }}
+</app-alert>
