@@ -102,5 +102,8 @@
       }
     }
   },
-  "defaultProject": "medium-clone"
+  "defaultProject": "medium-clone",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

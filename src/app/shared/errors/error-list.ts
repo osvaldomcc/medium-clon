@@ -1,6 +1,10 @@
-export const errors = {
-    "401": "You don't have permissions",
-    "403": "You don't have permissions",
-    "422": "Has ocurred an error please try again later",
-    "400": "Bad Request"
+interface Error {
+    [key: string]: string;
+}
+
+export const errors: Error = {
+    "error401" : "You don't have permissions",
+    "error403" : "You don't have permissions",
+    "error422" : "Has ocurred an error please try again later",
+    "error400" : "Bad Request"
 }

@@ -48,7 +48,11 @@ export class RegisterComponent {
         "password": this.registerForm.get('password')?.value,
       }
     }
-    this.authService.registerNewUser(user).subscribe((res) => console.log(res), (err) => this.generalError = "Email or password invalid");
+    this.authService.registerNewUser(user).subscribe((res) => {
+      console.log(res)
+    }, (err) => {
+      this.generalError = "Please contact the admin"
+    });
     this.registerForm.reset();
   }
 
