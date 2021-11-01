@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth-service.service';
+import { ValidatorService } from '../../../shared/validator/validator.service';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,7 @@ import { AuthService } from '../../services/auth-service.service';
 })
 export class RegisterComponent {
 
-  regexEmail: string = '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$';
+  //Declaración de Variables
   emailError: string = '';
   passwordError: string = '';
   usernameError: string = '';
@@ -17,19 +18,27 @@ export class RegisterComponent {
   generalError: string = '';
 
 
+  //Creación De Formulario
   registerForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(4)]],
-    email: ['', [Validators.required, Validators.pattern(this.regexEmail)]],
+    email: ['', [Validators.required, Validators.pattern(this.validate.regexEmail)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     password2: ['', [Validators.required]],
+  },{
+    validators: [this.validate.notEqualFields('password', 'password2')]
   });
 
-  constructor(private fb: FormBuilder, private authService: AuthService) { }
+  //Constructor
+  constructor(private fb: FormBuilder, 
+              private authService: AuthService,
+              private validate: ValidatorService) { }
 
-
+  
+  //Registrar Usuario
   registerUser(){
     this.generalError = '';
     if(this.registerForm.invalid){
+      this.registerForm.markAllAsTouched();
       return;
     }
     const user = {
@@ -43,66 +52,26 @@ export class RegisterComponent {
     this.registerForm.reset();
   }
 
-  
-  //Validar Form Funciones
-  validateEmail(){
-    const email = this.registerForm.get('email');
-    const errors = email?.errors;
-    if(errors){
-      if(errors.hasOwnProperty('pattern')){
-        this.emailError = "The email is invalid"
-      }else if(errors.hasOwnProperty('required')){
-        this.emailError = "The email is required"
-      }
-    }else{
-      this.emailError = '';
-    }    
+
+  //Getters Para Validar Formulario Y Recibir El Error
+  get validateEmail(){
+    this.emailError = this.validate.validateField(this.registerForm, 'email');
+    return this.emailError;
   }
 
-  validateUsername(){
-    const username = this.registerForm.get('username');
-    const errors = username?.errors;
-    if(errors){
-      if(errors.hasOwnProperty('minlength')){
-        this.usernameError = "The username length is less than 4"
-      } else if(errors.hasOwnProperty('required')){
-        this.usernameError = "The username is required"
-      }
-    }else{
-      this.usernameError = '';
-    }    
+  get validateUsername(){
+    this.usernameError = this.validate.validateField(this.registerForm ,'username', 4);
+    return this.usernameError;
   }
 
-  validatePassword(){
-    const errors = this.registerForm.get('password')?.errors;
-    if(this.registerForm.get('password')?.value !== this.registerForm.get('password2')?.value){
-      this.passwordError = "The passwords do not match"
-      return;
-    }
-    if(errors){
-      if(errors.hasOwnProperty('minlength')){
-        this.passwordError = "The password length is less than 6"
-      }else if(errors.hasOwnProperty('required')){
-        this.passwordError = "The email is required"
-      }
-    }else{
-      this.passwordError = '';
-    }    
+  get validatePassword(){
+    this.passwordError = this.validate.validateField(this.registerForm, 'password', 6);
+    return this.passwordError;
   }
 
-  validatePassword2(){
-    const errors = this.registerForm.get('password2')?.errors;
-    if(this.registerForm.get('password')?.value !== this.registerForm.get('password2')?.value){
-      this.password2Error = "The passwords do not match"
-      return;
-    }
-    if(errors){
-      if(errors.hasOwnProperty('required')){
-        this.password2Error = "The password is required"
-      }
-    }else{
-      this.password2Error = '';
-    }
+  get validatePassword2(){
+    this.password2Error = this.validate.validateField(this.registerForm, 'password2', 6, 'password');
+    return this.password2Error;
   }
 
 }

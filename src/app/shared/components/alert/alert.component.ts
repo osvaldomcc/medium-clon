@@ -20,7 +20,7 @@ export class AlertComponent implements OnDestroy, AfterViewInit {
     },3500);
     this.tOutTwo = setTimeout(() => {
       this.showAlert = false;
-    },4000);
+    },4100);
   }
 
   ngOnDestroy(): void {

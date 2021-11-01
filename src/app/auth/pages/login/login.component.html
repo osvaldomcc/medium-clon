@@ -1,24 +1,25 @@
 <h1 class="text-3xl text-gray-700 font-serif">Welcome back.</h1>
 <form class="my-5 text-gray-900" [formGroup]="loginForm" (ngSubmit)="login()">
   <app-forminput
-    (input)="validateEmail()"
     labelTitle="Email"
     typeInput="email"
     formControlName="email"
-    [errorMsg]="emailError"
+    [errorMsg]="validateEmail"
   ></app-forminput>
   <div class="mt-2"></div>
   <app-forminput
-    (input)="validatePassword()"
     labelTitle="Password"
     typeInput="password"
     formControlName="password"
-    [errorMsg]="passwordError"
+    [errorMsg]="validatePassword"
   ></app-forminput>
   <div class="mt-8 text-right max-w-sm m-auto">
-    <app-button typeButton="submit" [shouldEnable]="loginForm.invalid"
-      >Log In</app-button
-    >
+    <app-button typeButton="submit" [shouldEnable]="isLoading">
+      <app-spinner-small *ngIf="isLoading; else message"></app-spinner-small>
+      <ng-template #message>
+        <span>Log In</span>
+      </ng-template>
+    </app-button>
   </div>
   <hr class="mt-10" />
 </form>

@@ -5,15 +5,17 @@ import { ButtonComponent } from './components/button/button.component';
 import { FormsModule } from "@angular/forms";
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { SpinnerSmallComponent } from './components/spinner-small/spinner-small.component';
 
 
 
 @NgModule({
   declarations: [
     AlertComponent,
-    ErrorMessageComponent,
     ButtonComponent,
-    ForminputComponent
+    ErrorMessageComponent,
+    ForminputComponent,
+    SpinnerSmallComponent
   ],
   imports: [
     CommonModule,
@@ -21,9 +23,10 @@ import { AlertComponent } from './components/alert/alert.component';
   ],
   exports:[
     AlertComponent,
-    ErrorMessageComponent,
     ButtonComponent,
-    ForminputComponent
+    ErrorMessageComponent,
+    ForminputComponent,
+    SpinnerSmallComponent
   ]
 })
 export class SharedModule { }

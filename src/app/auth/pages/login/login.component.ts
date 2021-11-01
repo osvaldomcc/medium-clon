@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth-service.service';
-import { User } from '../../../interfaces/user.interface';
+import { ValidatorService } from '../../../shared/validator/validator.service';
+import { errors } from '../../../shared/errors/error-list';
 
 @Component({
   selector: 'app-login',
@@ -10,59 +11,60 @@ import { User } from '../../../interfaces/user.interface';
 })
 export class LoginComponent {
 
-  regexEmail: string = '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$';
+  //Declaración de Variables
   emailError: string = '';
   passwordError: string = '';
   generalError: string = '';
+  isLoading: boolean = false;
 
+  //Creación De Formulario
   loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.pattern(this.regexEmail)]],
+    email: ['', [Validators.required, Validators.pattern(this.validate.regexEmail)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  constructor(private fb: FormBuilder, private authService: AuthService) { }
+  //Constructor
+  constructor(private fb: FormBuilder, 
+              private authService: AuthService,
+              private validate: ValidatorService) { }
 
+  
+  //Loguear Usuario
   login() : void {
     this.generalError = '';
     if(this.loginForm.invalid){
+      this.loginForm.markAllAsTouched();
       return;
     }
+    this.isLoading = true;
     const user = {
       "user": {
         "email": this.loginForm.get('email')?.value,
         "password": this.loginForm.get('password')?.value,
       }
     }
-    this.authService.logUserIn(user).subscribe((res) => console.log(res), (err) => this.generalError = "Email or password invalid");
+    this.authService.logUserIn(user).subscribe((res) => {
+      this.isLoading = false;
+      console.log(res)
+    }, (err) => {
+      this.isLoading = false;
+      if(err.status === 403){
+        this.generalError = "Email or password are invalid";
+      }
+    });
+    
     this.loginForm.reset();
   }
 
-  //Validar funciones
-  validateEmail(){
-    const email = this.loginForm.get('email');
-    const errors = email?.errors;
-    if(errors){
-      if(errors.hasOwnProperty('pattern')){
-        this.emailError = "The email is invalid"
-      }else if(errors.hasOwnProperty('required')){
-        this.emailError = "The email is required"
-      }
-    }else{
-      this.emailError = '';
-    }    
+  //Getters Para Validar Formulario Y Recibir El Error
+  get validateEmail(){
+    this.emailError = this.validate.validateField(this.loginForm, 'email');
+    return this.emailError;
   }
 
-  validatePassword(){
-    const errors = this.loginForm.get('password')?.errors;
-    if(errors){
-      if(errors.hasOwnProperty('minlength')){
-        this.passwordError = "The password length is less than 6"
-      }else if(errors.hasOwnProperty('required')){
-        this.passwordError = "The email is required"
-      }
-    }else{
-      this.passwordError = '';
-    }    
+  get validatePassword(){
+    this.passwordError = this.validate.validateField(this.loginForm, 'password', 6);
+    return this.passwordError;
   }
 
 
