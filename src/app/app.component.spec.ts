@@ -23,7 +23,6 @@ describe('AppComponent', () => {
   it(`should have as title 'medium-clone'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('medium-clone');
   });
 
   it('should render title', () => {

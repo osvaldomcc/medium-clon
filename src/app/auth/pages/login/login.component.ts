@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth-service.service';
 import { ValidatorService } from '../../../shared/validator/validator.service';
 import { errors } from '../../../shared/errors/error-list';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,8 @@ export class LoginComponent {
   //Constructor
   constructor(private fb: FormBuilder, 
               private authService: AuthService,
-              private validate: ValidatorService) { }
+              private validate: ValidatorService,
+              private router: Router) { }
 
   
   //Loguear Usuario
@@ -45,11 +47,17 @@ export class LoginComponent {
     }
     this.authService.logUserIn(user).subscribe((res) => {
       this.isLoading = false;
-      console.log(res)
+      console.log(res);
+      this.router.navigateByUrl('/');
     }, (err) => {
       this.isLoading = false;
-      if(err.status === 403){
+      const status: number = err.status;
+      if(status === 403){
         this.generalError = "Email or password are invalid";
+      } else if(status === 401){
+        this.generalError = errors[`error${status}`];
+      } else {
+        this.generalError = "Please contact the admin";
       }
     });
     
